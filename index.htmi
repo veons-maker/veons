@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mining Clicker</title>
+
+<style>
+body{
+    font-family: Arial;
+    text-align: center;
+    background: #1e1e1e;
+    color: white;
+    margin-top: 40px;
+}
+
+button{
+    padding: 15px 25px;
+    font-size: 22px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+#mineBtn{
+    font-size: 30px;
+    width: 220px;
+    height: 90px;
+}
+
+.shop{
+    margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>⛏️ Mining Clicker</h1>
+
+<h2>🪨 Stone: <span id="stone">0</span></h2>
+<h3>⚡ Power: <span id="power">1</span></h3>
+<h3>🤖 Auto Miner: <span id="auto">0</span></h3>
+
+<button id="mineBtn" onclick="mine()">
+🪨 MINE
+</button>
+
+<div class="shop">
+    <button onclick="upgradePickaxe()">
+        Upgrade Pickaxe
+        <br>
+        Cost: <span id="pickaxeCost">10</span>
+    </button>
+
+    <button onclick="buyAutoMiner()">
+        Buy Auto Miner
+        <br>
+        Cost: <span id="autoCost">50</span>
+    </button>
+</div>
+
+<script>
+
+let stone = Number(localStorage.getItem("stone")) || 0;
+let power = Number(localStorage.getItem("power")) || 1;
+let autoMiner = Number(localStorage.getItem("autoMiner")) || 0;
+
+let pickaxeCost = Number(localStorage.getItem("pickaxeCost")) || 10;
+let autoCost = Number(localStorage.getItem("autoCost")) || 50;
+
+function save(){
+    localStorage.setItem("stone", stone);
+    localStorage.setItem("power", power);
+    localStorage.setItem("autoMiner", autoMiner);
+    localStorage.setItem("pickaxeCost", pickaxeCost);
+    localStorage.setItem("autoCost", autoCost);
+}
+
+function update(){
+    document.getElementById("stone").innerText = Math.floor(stone);
+    document.getElementById("power").innerText = power;
+    document.getElementById("auto").innerText = autoMiner;
+    document.getElementById("pickaxeCost").innerText = pickaxeCost;
+    document.getElementById("autoCost").innerText = autoCost;
+}
+
+function mine(){
+    stone += power;
+    update();
+    save();
+}
+
+function upgradePickaxe(){
+    if(stone >= pickaxeCost){
+        stone -= pickaxeCost;
+        power++;
+        pickaxeCost = Math.floor(pickaxeCost * 1.8);
+
+        update();
+        save();
+    }
+}
+
+function buyAutoMiner(){
+    if(stone >= autoCost){
+        stone -= autoCost;
+        autoMiner++;
+        autoCost = Math.floor(autoCost * 2);
+
+        update();
+        save();
+    }
+}
+
+setInterval(function(){
+    stone += autoMiner;
+    update();
+    save();
+},1000);
+
+update();
+
+</script>
+
+</body>
+</html>
